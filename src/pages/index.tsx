@@ -10,9 +10,13 @@ export default function Home() {
           content="Johns Hopkins University ACM Chapter"
         />
       </Head>
-      <main>
-        <h1>JHU ACM</h1>
-        <p>Johns Hopkins University ACM Chapter</p>
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-primary">JHU ACM</h1>
+          <p className="mt-2 text-gray-500">
+            Johns Hopkins University ACM Chapter
+          </p>
+        </div>
       </main>
     </>
   );
