@@ -6,7 +6,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req: { headers: req.headers as Record<string, string> },
+    secret: process.env.NEXTAUTH_SECRET,
+  });
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   }
