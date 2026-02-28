@@ -173,7 +173,7 @@ export default function AdminDashboard({
             { label: "Manage Officers", href: "/admin/officers" },
             { label: "Manage Lineages", href: "/admin/lineages" },
             { label: "Announcements", href: "/admin/announcements" },
-            { label: "Contact Messages", href: "/admin/messages" },
+            { label: "Contact Messages", href: "/admin/contact-submissions" },
           ].map((link) => (
             <Link
               key={link.href}
