@@ -49,34 +49,24 @@ export const getStaticProps: GetStaticProps<{
 
 const benefits = [
   {
-    title: "Office Access",
-    description: "24/7 J-Card access to our office in Malone Hall",
+    title: "Lounge Access",
+    description: "Hang out and study in our lounge in Malone Hall",
     icon: "🏢",
   },
   {
-    title: "Storage",
-    description: "50 GiB of personal storage on our servers",
-    icon: "💾",
+    title: "Exclusive Board Events",
+    description: "Attend members-only events hosted by our board",
+    icon: "🎉",
   },
   {
-    title: "Email",
-    description: "Email address at acm.jhu.edu / jhuacm.org",
-    icon: "✉️",
+    title: "Networking Opportunities",
+    description: "Connect with peers and professionals in the tech industry",
+    icon: "🤝",
   },
   {
-    title: "Virtual Machines",
-    description: "VMs and SSH access for your projects",
-    icon: "🖥️",
-  },
-  {
-    title: "Workstations & Printers",
-    description: "Access to workstations, printers, and other hardware",
-    icon: "🖨️",
-  },
-  {
-    title: "GitLab",
-    description: "Private GitLab instance for your repositories",
-    icon: "🔀",
+    title: "Upperclassmen Mentors",
+    description: "Get guidance from experienced upperclassmen in CS and related fields",
+    icon: "🎓",
   },
 ];
 
@@ -159,7 +149,7 @@ export default function AboutPage({
             <h2 className="mb-8 text-center text-2xl font-bold text-primary">
               Membership Benefits
             </h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2">
               {benefits.map((benefit) => (
                 <div
                   key={benefit.title}
