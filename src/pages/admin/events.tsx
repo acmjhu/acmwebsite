@@ -1,5 +1,8 @@
 import Head from "next/head";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import type { GetServerSideProps } from "next";
+import { prisma } from "@/lib/prisma";
+import { useRouter } from "next/router";
 
 interface AdminEvent {
   id: string;
@@ -41,6 +44,33 @@ const emptyForm: EventForm = {
   endTime: "",
 };
 
+interface Props {
+  events: AdminEvent[];
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const events = await prisma.event.findMany({
+    orderBy: { startTime: "desc" },
+    include: { signups: { select: { id: true } } },
+  });
+
+  return {
+    props: {
+      events: events.map((e) => ({
+        id: e.id,
+        name: e.name,
+        description: e.description,
+        location: e.location,
+        category: e.category,
+        link: e.link,
+        startTime: e.startTime.toISOString(),
+        endTime: e.endTime.toISOString(),
+        signupCount: e.signups.length,
+      })),
+    },
+  };
+};
+
 function toLocalDatetime(iso: string) {
   const d = new Date(iso);
   const pad = (n: number) => n.toString().padStart(2, "0");
@@ -57,9 +87,8 @@ function formatDate(iso: string) {
   });
 }
 
-export default function AdminEventsPage() {
-  const [events, setEvents] = useState<AdminEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function AdminEventsPage({ events }: Props) {
+  const router = useRouter();
   const [error, setError] = useState("");
 
   // Form state
@@ -82,21 +111,9 @@ export default function AdminEventsPage() {
   // Delete confirmation
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const fetchEvents = useCallback(async () => {
-    try {
-      const res = await fetch("/api/admin/events");
-      if (!res.ok) throw new Error("Failed to fetch events");
-      setEvents(await res.json());
-    } catch {
-      setError("Failed to load events");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+  function refreshEvents() {
+    router.replace(router.asPath);
+  }
 
   function openCreate() {
     setEditingId(null);
@@ -142,7 +159,7 @@ export default function AdminEventsPage() {
       }
 
       setShowForm(false);
-      await fetchEvents();
+      refreshEvents();
     } catch {
       setFormError("Network error");
     } finally {
@@ -165,7 +182,7 @@ export default function AdminEventsPage() {
       }
 
       setDeletingId(null);
-      await fetchEvents();
+      refreshEvents();
     } catch {
       setError("Network error");
     }
@@ -230,23 +247,12 @@ export default function AdminEventsPage() {
             setSignups(signupsData.signups);
           }
         }
-        await fetchEvents();
+        refreshEvents();
       } catch {
         setAttendanceResult("Network error");
       }
     };
     reader.readAsDataURL(file);
-  }
-
-  if (loading) {
-    return (
-      <>
-        <Head>
-          <title>Manage Events | ACM@JHU Admin</title>
-        </Head>
-        <p className="text-gray-500">Loading events...</p>
-      </>
-    );
   }
 
   return (

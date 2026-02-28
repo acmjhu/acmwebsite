@@ -1,13 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/adminAuth";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (!(await requireAdmin(req, res))) return;
-
   if (req.method === "GET") {
     const events = await prisma.event.findMany({
       orderBy: { startTime: "desc" },
