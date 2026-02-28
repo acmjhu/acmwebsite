@@ -20,7 +20,7 @@ export default function Footer() {
                 jhuacmofficers@gmail.com
               </a>
               <a
-                href="https://instagram.com/acmjhu"
+                href="https://instagram.com/jhuacm"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/70 transition-colors hover:text-white"
