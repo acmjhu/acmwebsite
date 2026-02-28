@@ -2,6 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -20,7 +28,9 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { eventId, csvContent } = req.body;
+  const body =
+    typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  const { eventId, csvContent } = body;
 
   if (!eventId || typeof eventId !== "string") {
     return res.status(400).json({ error: "eventId is required" });
