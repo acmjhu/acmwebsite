@@ -1,17 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- NextApiRequest is compatible at runtime
-  const token = await getToken({ req: req as any, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   const { id } = req.query;
   if (typeof id !== "string") {
     return res.status(400).json({ error: "Invalid announcement ID" });

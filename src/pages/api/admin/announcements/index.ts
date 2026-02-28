@@ -1,24 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- NextApiRequest is compatible at runtime
-  const token = await getToken({ req: req as any, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  if (req.method === "GET") {
-    const announcements = await prisma.announcement.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-    return res.status(200).json(announcements);
-  }
-
   if (req.method === "POST") {
     const { title, content } = req.body;
 
@@ -47,6 +33,6 @@ export default async function handler(
     }
   }
 
-  res.setHeader("Allow", "GET, POST");
+  res.setHeader("Allow", "POST");
   return res.status(405).json({ error: "Method not allowed" });
 }

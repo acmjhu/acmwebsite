@@ -1,5 +1,8 @@
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { prisma } from "@/lib/prisma";
 
 type Announcement = {
   id: string;
@@ -10,6 +13,26 @@ type Announcement = {
   updatedAt: string;
 };
 
+type Props = {
+  announcements: Announcement[];
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const announcements = await prisma.announcement.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+
+  return {
+    props: {
+      announcements: announcements.map((a) => ({
+        ...a,
+        createdAt: a.createdAt.toISOString(),
+        updatedAt: a.updatedAt.toISOString(),
+      })),
+    },
+  };
+};
+
 type FormData = {
   title: string;
   content: string;
@@ -17,27 +40,18 @@ type FormData = {
 
 const emptyForm: FormData = { title: "", content: "" };
 
-export default function AdminAnnouncements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function AdminAnnouncements({
+  announcements: initial,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const [announcements, setAnnouncements] = useState<Announcement[]>(initial);
   const [form, setForm] = useState<FormData>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
-  async function fetchAnnouncements() {
-    try {
-      const res = await fetch("/api/admin/announcements");
-      if (res.ok) {
-        setAnnouncements(await res.json());
-      }
-    } finally {
-      setLoading(false);
-    }
+  function refresh() {
+    router.replace(router.asPath);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -65,9 +79,18 @@ export default function AdminAnnouncements() {
         return;
       }
 
+      const saved: Announcement = await res.json();
+
+      if (editingId) {
+        setAnnouncements((prev) =>
+          prev.map((a) => (a.id === saved.id ? saved : a)),
+        );
+      } else {
+        setAnnouncements((prev) => [saved, ...prev]);
+      }
+
       setForm(emptyForm);
       setEditingId(null);
-      await fetchAnnouncements();
     } catch {
       setError("Network error");
     } finally {
@@ -89,20 +112,31 @@ export default function AdminAnnouncements() {
   }
 
   async function toggleActive(a: Announcement) {
-    await fetch(`/api/admin/announcements/${a.id}`, {
+    const res = await fetch(`/api/admin/announcements/${a.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isActive: !a.isActive }),
     });
-    await fetchAnnouncements();
+
+    if (res.ok) {
+      const saved: Announcement = await res.json();
+      setAnnouncements((prev) =>
+        prev.map((x) => (x.id === saved.id ? saved : x)),
+      );
+    }
   }
 
   async function handleDelete(a: Announcement) {
     if (!confirm(`Delete "${a.title}"? This cannot be undone.`)) return;
 
-    await fetch(`/api/admin/announcements/${a.id}`, { method: "DELETE" });
-    if (editingId === a.id) cancelEdit();
-    await fetchAnnouncements();
+    const res = await fetch(`/api/admin/announcements/${a.id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      setAnnouncements((prev) => prev.filter((x) => x.id !== a.id));
+      if (editingId === a.id) cancelEdit();
+    }
   }
 
   return (
@@ -195,9 +229,7 @@ export default function AdminAnnouncements() {
 
       {/* List */}
       <div className="mt-8">
-        {loading ? (
-          <p className="text-sm text-gray-400">Loading...</p>
-        ) : announcements.length === 0 ? (
+        {announcements.length === 0 ? (
           <p className="text-sm text-gray-400">
             No announcements yet. Create one above.
           </p>
