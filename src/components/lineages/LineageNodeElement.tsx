@@ -11,12 +11,9 @@ export default function LineageNodeElement({
   const role = attrs?.role as string | undefined;
   const imageUrl = attrs?.imageUrl as string | undefined;
   const isVirtualRoot = attrs?.id === "virtual-root";
-  const isHighlighted = attrs?.__highlighted === true;
-  const isSearchActive = attrs?.__searchActive === true;
 
   const nodeWidth = 172;
   const nodeHeight = 72;
-  const dimOpacity = isSearchActive && !isHighlighted ? 0.25 : 1;
 
   if (isVirtualRoot) {
     return (
@@ -29,7 +26,7 @@ export default function LineageNodeElement({
   const nodeId = (attrs?.id as string) || "node";
 
   return (
-    <g onClick={toggleNode} style={{ cursor: "pointer", opacity: dimOpacity }}>
+    <g onClick={toggleNode} style={{ cursor: "pointer" }}>
       <defs>
         <clipPath id={`clip-${nodeId}`}>
           <rect
@@ -58,8 +55,8 @@ export default function LineageNodeElement({
         height={nodeHeight}
         rx={12}
         fill="white"
-        stroke={isHighlighted ? "#10b981" : "#e5e7eb"}
-        strokeWidth={isHighlighted ? 2 : 1}
+        stroke="#e5e7eb"
+        strokeWidth={1}
       />
       {/* Left accent bar (clipped to card shape) */}
       <rect

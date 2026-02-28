@@ -24,5 +24,4 @@ export interface LineagesPageProps {
     name: string;
     data: LineageTreeNode;
   }[];
-  graduationYears: number[];
 }

@@ -67,13 +67,3 @@ export function buildLineageTrees(
   trees.sort((a, b) => a.name.localeCompare(b.name));
   return trees;
 }
-
-export function extractGraduationYears(
-  members: LineageMemberRecord[]
-): number[] {
-  const years = new Set<number>();
-  for (const m of members) {
-    if (m.graduationYear) years.add(m.graduationYear);
-  }
-  return Array.from(years).sort((a, b) => a - b);
-}

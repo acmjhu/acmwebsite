@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import { prisma } from "@/lib/prisma";
-import { buildLineageTrees, extractGraduationYears } from "@/lib/lineage";
+import { buildLineageTrees } from "@/lib/lineage";
 import TreeSelector from "@/components/lineages/TreeSelector";
 import LineageTree from "@/components/lineages/LineageTree";
 import type { LineagesPageProps } from "@/types/lineage";
@@ -25,34 +25,22 @@ export const getServerSideProps: GetServerSideProps<
     });
 
     const trees = buildLineageTrees(members);
-    const graduationYears = extractGraduationYears(members);
 
     return {
-      props: {
-        trees,
-        graduationYears,
-      },
+      props: { trees },
     };
   } catch (error) {
     console.error("Failed to fetch lineage data:", error);
     return {
-      props: {
-        trees: [],
-        graduationYears: [],
-      },
+      props: { trees: [] },
     };
   }
 };
 
-export default function LineagesPage({
-  trees,
-  graduationYears,
-}: LineagesPageProps) {
+export default function LineagesPage({ trees }: LineagesPageProps) {
   const [selectedTreeName, setSelectedTreeName] = useState(
     trees[0]?.name || ""
   );
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   const selectedTree = trees.find((t) => t.name === selectedTreeName);
 
@@ -86,19 +74,10 @@ export default function LineagesPage({
                 treeNames={trees.map((t) => t.name)}
                 selectedTree={selectedTreeName}
                 onTreeChange={setSelectedTreeName}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                graduationYears={graduationYears}
-                selectedYear={selectedYear}
-                onYearChange={setSelectedYear}
               />
 
               {selectedTree ? (
-                <LineageTree
-                  data={selectedTree.data}
-                  searchQuery={searchQuery}
-                  selectedYear={selectedYear}
-                />
+                <LineageTree data={selectedTree.data} />
               ) : (
                 <div className="rounded-lg border border-gray-200 bg-white p-12 text-center text-gray-500">
                   Select a family tree to view.
