@@ -6,9 +6,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const secureCookie = req.headers["x-forwarded-proto"] === "https";
   const token = await getToken({
     req: { headers: req.headers as Record<string, string> },
     secret: process.env.NEXTAUTH_SECRET,
+    secureCookie,
   });
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
