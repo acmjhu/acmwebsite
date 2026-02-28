@@ -7,6 +7,8 @@
     "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
+    "seed": "node prisma/seed.js",
+    "seed:data": "node prisma/seed-data.js",
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\""
