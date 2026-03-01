@@ -9,7 +9,7 @@ const navItems = [
   { label: "Officers", href: "/admin/officers" },
   { label: "Lineages", href: "/admin/lineages" },
   { label: "Announcements", href: "/admin/announcements" },
-  { label: "Messages", href: "/admin/messages" },
+  { label: "Messages", href: "/admin/contact-submissions" },
 ];
 
 export default function AdminLayout({
