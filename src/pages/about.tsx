@@ -152,10 +152,12 @@ export default function AboutPage({
                 Our Mission
               </h2>
               <p className="text-lg leading-relaxed text-gray-700">
-                We are a student organization of the Johns Hopkins University
-                dedicated to furthering the knowledge and advancement of
-                computers and information technology through the free exchange of
-                ideas and information.
+                We are the Johns Hopkins University chapter of the Association
+                for Computing Machinery &mdash; dedicated to advancing computing
+                knowledge through the free exchange of ideas. At JHU, that means
+                building a strong network of students who uplift each other,
+                fostering a community where everyone belongs, and shipping cool
+                projects together.
               </p>
             </div>
           </div>
