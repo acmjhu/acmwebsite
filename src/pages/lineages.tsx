@@ -1,9 +1,7 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { useState } from "react";
 import { prisma } from "@/lib/prisma";
 import { buildLineageTrees } from "@/lib/lineage";
-import TreeSelector from "@/components/lineages/TreeSelector";
 import LineageTree from "@/components/lineages/LineageTree";
 import type { LineagesPageProps } from "@/types/lineage";
 
@@ -38,11 +36,14 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 export default function LineagesPage({ trees }: LineagesPageProps) {
-  const [selectedTreeName, setSelectedTreeName] = useState(
-    trees[0]?.name || ""
-  );
-
-  const selectedTree = trees.find((t) => t.name === selectedTreeName);
+  const combinedData =
+    trees.length === 1
+      ? trees[0].data
+      : {
+          name: "",
+          attributes: { id: "virtual-root" },
+          children: trees.map((t) => t.data),
+        };
 
   return (
     <>
@@ -66,24 +67,10 @@ export default function LineagesPage({ trees }: LineagesPageProps) {
           </div>
         </section>
 
-        {/* Controls + Tree */}
+        {/* All Trees */}
         <section className="mx-auto max-w-6xl px-6 py-8">
           {trees.length > 0 ? (
-            <>
-              <TreeSelector
-                treeNames={trees.map((t) => t.name)}
-                selectedTree={selectedTreeName}
-                onTreeChange={setSelectedTreeName}
-              />
-
-              {selectedTree ? (
-                <LineageTree data={selectedTree.data} />
-              ) : (
-                <div className="rounded-lg border border-gray-200 bg-white p-12 text-center text-gray-500">
-                  Select a family tree to view.
-                </div>
-              )}
-            </>
+            <LineageTree data={combinedData} />
           ) : (
             <div className="rounded-lg border border-gray-200 bg-white p-12 text-center text-gray-500">
               No lineage data available yet.
