@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface OfficerCardProps {
   name: string;
   role: string;
@@ -22,12 +20,11 @@ export default function OfficerCard({
         <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white/95 p-6 shadow-lg backdrop-blur-xl [backface-visibility:hidden]">
           <div className="relative mb-4 h-28 w-28 overflow-hidden rounded-full bg-primary-light">
             {imageUrl ? (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={imageUrl}
                 alt={name}
-                fill
-                className="object-cover"
-                sizes="112px"
+                className="h-full w-full object-cover"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-primary/40">

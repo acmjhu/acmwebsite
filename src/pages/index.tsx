@@ -318,6 +318,25 @@ export default function Home({
         </div>
       </section>
 
+      {/* Mailing List */}
+      <section className="bg-primary py-16 text-white">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <h2 className="text-3xl font-bold">Stay in the Loop</h2>
+          <p className="mt-3 text-white/80">
+            Subscribe to our mailing list to get notified about upcoming events,
+            workshops, and ACM news.
+          </p>
+          <a
+            href="https://lists.cs.jhu.edu/mailman/listinfo/acm-announce"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-block rounded-lg bg-white px-8 py-3 text-sm font-semibold text-primary transition-opacity hover:opacity-90"
+          >
+            Join the Mailing List
+          </a>
+        </div>
+      </section>
+
       {/* Announcements */}
       {announcements.length > 0 && (
         <section className="bg-white py-16">

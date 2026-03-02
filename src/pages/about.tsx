@@ -47,25 +47,43 @@ export const getStaticProps: GetStaticProps<{
   }
 };
 
-const benefits = [
+const eventReasons = [
   {
-    title: "Lounge Access",
-    description: "Hang out and study in our lounge in Malone Hall",
-    icon: "🏢",
+    title: "Learn from Peers",
+    description: "Pick up new skills and perspectives from fellow students at workshops, talks, and coding circles.",
+    icon: "📚",
   },
   {
-    title: "Exclusive Board Events",
-    description: "Attend members-only events hosted by our board",
+    title: "Build Projects",
+    description: "Collaborate on real projects and get hands-on experience with tools and technologies that matter.",
+    icon: "🛠️",
+  },
+  {
+    title: "Have Fun",
+    description: "Enjoy social events, game nights, and a welcoming community of people who love computing.",
     icon: "🎉",
   },
   {
-    title: "Networking Opportunities",
-    description: "Connect with peers and professionals in the tech industry",
+    title: "Lounge Access",
+    description: "Hang out, study, and work on projects in our lounge in Malone Hall.",
+    icon: "🏢",
+  },
+];
+
+const boardReasons = [
+  {
+    title: "Build Events for the Community",
+    description: "Take ownership of workshops, hackathons, and speaker series that shape the JHU CS experience.",
+    icon: "🗓️",
+  },
+  {
+    title: "Join a Strong Board Network",
+    description: "Work alongside driven peers and connect with a network of ACM alumni across industry and research.",
     icon: "🤝",
   },
   {
-    title: "Upperclassmen Mentors",
-    description: "Get guidance from experienced upperclassmen in CS and related fields",
+    title: "Give Back",
+    description: "Pay it forward by mentoring younger students and strengthening the community that supported you.",
     icon: "🎓",
   },
 ];
@@ -134,33 +152,60 @@ export default function AboutPage({
                 Our Mission
               </h2>
               <p className="text-lg leading-relaxed text-gray-700">
-                We are a student organization of the Johns Hopkins University
-                dedicated to furthering the knowledge and advancement of
-                computers and information technology through the free exchange of
-                ideas and information.
+                We are the Johns Hopkins University chapter of the Association
+                for Computing Machinery &mdash; dedicated to advancing computing
+                knowledge through the free exchange of ideas. At JHU, that means
+                building a strong network of students who uplift each other,
+                fostering a community where everyone belongs, and shipping cool
+                projects together.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Membership Benefits */}
+        {/* Why Attend Our Events */}
         <section className="py-16">
           <div className="mx-auto max-w-6xl px-6">
             <h2 className="mb-8 text-center text-2xl font-bold text-primary">
-              Membership Benefits
+              Why Attend Our Events
             </h2>
             <div className="grid gap-6 sm:grid-cols-2">
-              {benefits.map((benefit) => (
+              {eventReasons.map((item) => (
                 <div
-                  key={benefit.title}
+                  key={item.title}
                   className="rounded-2xl bg-white/95 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <span className="text-3xl">{benefit.icon}</span>
+                  <span className="text-3xl">{item.icon}</span>
                   <h3 className="mt-3 text-lg font-bold text-primary">
-                    {benefit.title}
+                    {item.title}
                   </h3>
                   <p className="mt-1 text-sm text-gray-600">
-                    {benefit.description}
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Join Board */}
+        <section className="py-16">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="mb-8 text-center text-2xl font-bold text-primary">
+              Why Join Board
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-3">
+              {boardReasons.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl bg-white/95 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <span className="text-3xl">{item.icon}</span>
+                  <h3 className="mt-3 text-lg font-bold text-primary">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-600">
+                    {item.description}
                   </p>
                 </div>
               ))}
