@@ -36,6 +36,15 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 export default function LineagesPage({ trees }: LineagesPageProps) {
+  const combinedData =
+    trees.length === 1
+      ? trees[0].data
+      : {
+          name: "",
+          attributes: { id: "virtual-root" },
+          children: trees.map((t) => t.data),
+        };
+
   return (
     <>
       <Head>
@@ -61,16 +70,7 @@ export default function LineagesPage({ trees }: LineagesPageProps) {
         {/* All Trees */}
         <section className="mx-auto max-w-6xl px-6 py-8">
           {trees.length > 0 ? (
-            <div className="flex flex-col gap-10">
-              {trees.map((tree) => (
-                <div key={tree.name}>
-                  <h2 className="mb-4 text-xl font-semibold text-gray-800">
-                    {tree.name}
-                  </h2>
-                  <LineageTree data={tree.data} />
-                </div>
-              ))}
-            </div>
+            <LineageTree data={combinedData} />
           ) : (
             <div className="rounded-lg border border-gray-200 bg-white p-12 text-center text-gray-500">
               No lineage data available yet.

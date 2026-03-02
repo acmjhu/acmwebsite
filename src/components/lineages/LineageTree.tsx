@@ -62,7 +62,7 @@ export default function LineageTree({ data }: LineageTreeProps) {
         }}
       />
       {/* Tree */}
-      <div ref={setContainerRef} className="relative h-[600px] w-full">
+      <div ref={setContainerRef} className="relative h-[800px] w-full">
         <Tree
           data={data as RawNodeDatum}
           orientation="vertical"
