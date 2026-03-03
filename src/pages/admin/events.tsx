@@ -143,7 +143,12 @@ export default function AdminEventsPage({ events }: Props) {
     setFormError("");
 
     const method = editingId ? "PUT" : "POST";
-    const body = editingId ? { id: editingId, ...form } : form;
+    const formWithUtc = {
+      ...form,
+      startTime: new Date(form.startTime).toISOString(),
+      endTime: new Date(form.endTime).toISOString(),
+    };
+    const body = editingId ? { id: editingId, ...formWithUtc } : formWithUtc;
 
     try {
       const res = await fetch("/api/admin/events", {
