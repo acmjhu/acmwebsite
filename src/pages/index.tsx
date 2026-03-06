@@ -11,47 +11,26 @@ type Event = {
   category: string;
 };
 
-type Announcement = {
-  id: string;
-  title: string;
-  content: string | null;
-  createdAt: string;
-};
-
 type HomeProps = {
   upcomingEvents: Event[];
-  announcements: Announcement[];
 };
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
     const now = new Date();
 
-    const [upcomingEvents, announcements] = await Promise.all([
-      prisma.event.findMany({
-        where: { startTime: { gte: now } },
-        orderBy: { startTime: "asc" },
-        take: 3,
-        select: {
-          id: true,
-          name: true,
-          startTime: true,
-          location: true,
-          category: true,
-        },
-      }),
-      prisma.announcement.findMany({
-        where: { isActive: true },
-        orderBy: { createdAt: "desc" },
-        take: 3,
-        select: {
-          id: true,
-          title: true,
-          content: true,
-          createdAt: true,
-        },
-      }),
-    ]);
+    const upcomingEvents = await prisma.event.findMany({
+      where: { startTime: { gte: now } },
+      orderBy: { startTime: "asc" },
+      take: 3,
+      select: {
+        id: true,
+        name: true,
+        startTime: true,
+        location: true,
+        category: true,
+      },
+    });
 
     return {
       props: {
@@ -59,17 +38,12 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
           ...e,
           startTime: e.startTime.toISOString(),
         })),
-        announcements: announcements.map((a) => ({
-          ...a,
-          createdAt: a.createdAt.toISOString(),
-        })),
       },
     };
   } catch {
     return {
       props: {
         upcomingEvents: [],
-        announcements: [],
       },
     };
   }
@@ -150,7 +124,6 @@ const quickLinks = [
 
 export default function Home({
   upcomingEvents,
-  announcements,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
@@ -337,40 +310,6 @@ export default function Home({
         </div>
       </section>
 
-      {/* Announcements */}
-      {announcements.length > 0 && (
-        <section className="bg-white py-16">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="text-center text-3xl font-bold text-primary">
-              Announcements
-            </h2>
-            <div className="mt-10 space-y-4">
-              {announcements.map((a) => (
-                <div
-                  key={a.id}
-                  className="rounded-xl border border-gray-200 bg-gray-50 p-6"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {a.title}
-                    </h3>
-                    <time className="shrink-0 text-xs text-gray-400">
-                      {new Date(a.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </time>
-                  </div>
-                  {a.content && (
-                    <p className="mt-2 text-sm text-gray-600">{a.content}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </>
   );
 }
