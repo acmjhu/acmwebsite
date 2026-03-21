@@ -174,6 +174,7 @@ export default function AdminDashboard({
             { label: "Manage Lineages", href: "/admin/lineages" },
             { label: "Announcements", href: "/admin/announcements" },
             { label: "Contact Messages", href: "/admin/contact-submissions" },
+            { label: "InternMap Submissions", href: "/admin/intern-map" },
           ].map((link) => (
             <Link
               key={link.href}

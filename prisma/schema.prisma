@@ -93,6 +93,25 @@ model Admin {
   @@map("admins")
 }
 
+model InternMapEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  company   String   @db.VarChar(255)
+  role      String   @db.VarChar(255)
+  term      String   @db.VarChar(50)
+  year      String   @db.VarChar(50)
+  lat       Float
+  lng       Float
+  contact   String?  @db.Text
+  photoUrl  String?  @db.Text
+  status    String   @default("pending") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("intern_map_entries")
+}
+
 model ContactSubmission {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String   @db.VarChar(255)
