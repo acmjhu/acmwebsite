@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  if (!email.endsWith("@jhu.edu") && !email.endsWith("@jhmi.edu")) {
+  if (!email.endsWith("@jhu.edu") && !email.endsWith("@jhmi.edu") && !email.endsWith("@jh.edu")) {
     return res.status(400).json({ error: "Must use a JHU email address" });
   }
 

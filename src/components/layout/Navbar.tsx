@@ -50,7 +50,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden gap-8 md:flex" ref={dropdownRef}>
+        <ul className="hidden items-center gap-8 md:flex" ref={dropdownRef}>
           {navItems.map((item) =>
             isDropdown(item) ? (
               <li key={item.label} className="relative flex items-center">
